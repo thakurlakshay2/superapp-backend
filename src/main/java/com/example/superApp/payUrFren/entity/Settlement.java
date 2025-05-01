@@ -29,11 +29,11 @@ public class Settlement {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "from_user_id", nullable = false)
-    private PayUrFrenUser fromUser;
+    private User fromUser;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "to_user_id", nullable = false)
-    private PayUrFrenUser toUser;
+    private User toUser;
 
     @Column(nullable = false, precision = 19, scale = 4)
     private BigDecimal amount;

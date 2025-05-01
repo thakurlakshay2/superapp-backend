@@ -1,17 +1,17 @@
-package com.example.superApp.userService.dto;
+package com.example.superApp.payUrFren.dto;
 
 import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+// Base DTO for user operations
 @Data
-public class UserResponseDTO {
+public class BaseUserDTO {
     private UUID id;
     private String username;
     private String email;
+    private String phone;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
-    // Don't include password in response
-
 }
+
