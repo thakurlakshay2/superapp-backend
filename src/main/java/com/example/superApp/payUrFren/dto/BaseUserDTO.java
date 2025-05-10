@@ -13,5 +13,6 @@ public class BaseUserDTO {
     private String phone;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private String password;
 }
 

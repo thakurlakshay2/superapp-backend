@@ -2,12 +2,14 @@ package com.example.superApp.payUrFren.service.impl;
 
 import com.example.superApp.payUrFren.dto.BaseUserDTO;
 import com.example.superApp.payUrFren.dto.CreateUserDTO;
+import com.example.superApp.payUrFren.dto.UserDTOResponse;
 import com.example.superApp.payUrFren.entity.User;
 import com.example.superApp.payUrFren.mapper.UserMapper;
 import com.example.superApp.payUrFren.repository.BaseUserRepository;
 import com.example.superApp.payUrFren.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.context.annotation.Bean;
+
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,25 +24,32 @@ public class UserServiceImpl implements UserService {
 
     private final BaseUserRepository baseUserRepository;
     private final UserMapper userMapper;
-//    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+
 
     @Transactional
-    public BaseUserDTO createUser(CreateUserDTO createUserDTO) {
-        // Create base user
-        System.out.println(" i m here");
-        User user = userMapper.toBaseUser(createUserDTO);
+    public UserDTOResponse createUser(CreateUserDTO createUserDTO) {
+        // Check for uniqueness
+        if (baseUserRepository.existsByEmail(createUserDTO.getEmail())) {
+            throw new IllegalArgumentException("Email already in use");
+        }
 
-        // Set password (encoded) and timestamps
-        user.setPassword(createUserDTO.getPassword());
+        if (baseUserRepository.existsByUsername(createUserDTO.getUsername())) {
+            throw new IllegalArgumentException("Username already in use");
+        }
+
+        // Map DTO to entity
+        User user = userMapper.toBaseUser(createUserDTO);
+        // Encode password and set timestamps
+        user.setPassword(passwordEncoder.encode(createUserDTO.getPassword()));
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(LocalDateTime.now());
 
-        // Save base user
+        // Save user
         User savedUser = baseUserRepository.save(user);
 
-
-        // Return DTO without sensitive information
-        return userMapper.toBaseUserDTO(savedUser);
+        // Return response DTO
+        return userMapper.toUserDTOResponse(savedUser);
     }
 
     /**
@@ -49,6 +58,11 @@ public class UserServiceImpl implements UserService {
     public Optional<BaseUserDTO> getPayUrFrenUser(UUID userId) {
         return baseUserRepository.findById(userId)
                 .map(userMapper::toBaseUserDTO);
+    }
+
+    @Override
+    public Optional<BaseUserDTO> loadUserByEmail(String email) {
+        return baseUserRepository.findByEmail(email).map(userMapper::toBaseUserDTO);
     }
 
     /**

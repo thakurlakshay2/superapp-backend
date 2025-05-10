@@ -3,10 +3,11 @@ package com.example.superApp.payUrFren.controller;
 import com.example.superApp.payUrFren.dto.BaseUserDTO;
 import com.example.superApp.payUrFren.dto.CreateUserDTO;
 
+import com.example.superApp.payUrFren.dto.UserDTOResponse;
 import com.example.superApp.payUrFren.service.UserService;
 
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
+
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +23,16 @@ public class UserController {
 
     private final UserService userService;
 
-
-    @PostMapping
-    public ResponseEntity<BaseUserDTO> createUser(@RequestBody CreateUserDTO userDTO) {
-        BaseUserDTO user=userService.createUser(userDTO);
+     @GetMapping
+     public ResponseEntity<String> healthCheck(){
+         return new ResponseEntity<>("Healthy",HttpStatus.OK);
+     }
+    @PostMapping("/createUser")
+    public ResponseEntity<UserDTOResponse> createUser(@RequestBody CreateUserDTO userDTO) {
+        System.out.println("i am called");
+        UserDTOResponse user=userService.createUser(userDTO);
         return new ResponseEntity<>(user, HttpStatus.OK);
+
     }
 
 

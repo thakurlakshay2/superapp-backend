@@ -2,6 +2,7 @@ package com.example.superApp.payUrFren.mapper;
 
 import com.example.superApp.payUrFren.dto.BaseUserDTO;
 import com.example.superApp.payUrFren.dto.CreateUserDTO;
+import com.example.superApp.payUrFren.dto.UserDTOResponse;
 import com.example.superApp.payUrFren.entity.User;
 import org.springframework.stereotype.Component;
 
@@ -35,6 +36,28 @@ public class UserMapper {
 
         return baseUserDTO;
     }
+
+
+    public UserDTOResponse toUserDTOResponse(User user) {
+        if (user == null) {
+            return null;
+        }
+
+        UserDTOResponse baseUserDTO = new UserDTOResponse();
+
+        // Map common fields
+        baseUserDTO.setUsername(user.getUsername());
+        baseUserDTO.setPhone(user.getPhone());
+        baseUserDTO.setEmail(user.getEmail());
+        baseUserDTO.setCreatedAt(user.getCreatedAt());
+        baseUserDTO.setUpdatedAt(user.getUpdatedAt());
+
+
+        // baseUserDTO.setPassword(user.getPassword()); // Ignored as per @Mapping(target = "password", ignore = true)
+
+        return baseUserDTO;
+    }
+
 
     /**
      * Maps a CreateUserDTO to a new User entity.
