@@ -3,6 +3,7 @@ package com.example.superApp.payUrFren.service;
 import com.example.superApp.payUrFren.dto.BaseUserDTO;
 import com.example.superApp.payUrFren.dto.CreateUserDTO;
 import com.example.superApp.payUrFren.dto.UserDTOResponse;
+import com.example.superApp.payUrFren.entity.User;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -12,4 +13,5 @@ public interface UserService {
     Optional<BaseUserDTO> getPayUrFrenUser(UUID id);
     Optional<BaseUserDTO> loadUserByEmail(String email);
     Optional<BaseUserDTO> updateUser(UUID userId, BaseUserDTO userDTO);
+    Optional<User> getUser(UUID userId);
 }

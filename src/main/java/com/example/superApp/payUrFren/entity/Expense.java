@@ -10,6 +10,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "expenses")
@@ -21,15 +23,15 @@ public class Expense {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "transaction_id", nullable = false)
-    private Transaction transaction;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "transaction_id", nullable = false)
+//    private Transaction transaction;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private User paidBy;
 
     @Column(nullable = false, precision = 19, scale = 4)
     private BigDecimal amount;
@@ -44,4 +46,13 @@ public class Expense {
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "expense", cascade = CascadeType.ALL)
+    private List<ExpenseShare> splits;
+
+    @ManyToOne
+    private Group group;
+
+    private String description;
+
 }
