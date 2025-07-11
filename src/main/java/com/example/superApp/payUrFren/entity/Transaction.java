@@ -6,12 +6,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "transactions")
@@ -23,8 +25,13 @@ import java.util.Set;
 public class Transaction {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(name = "id", updatable = false, nullable = false)
+    private UUID id;
 
     @Column(nullable = false)
     private String description;
@@ -42,8 +49,10 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     private TransactionCategory category;
 
+    @Column(nullable = true)
     private String receipt;
 
+    @Column(nullable = true)
     private String notes;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -56,7 +65,7 @@ public class Transaction {
 
     @Builder.Default
     @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Expense> expenses = new HashSet<>();
+    private Set<Expense> expenses = new java.util.HashSet<>();
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

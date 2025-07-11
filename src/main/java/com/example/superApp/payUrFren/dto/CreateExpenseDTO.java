@@ -10,6 +10,6 @@ public class CreateExpenseDTO {
     private UUID groupId;
     private UUID paidBy;
     private String description;
-    private double amount;
+    private Double amount;
     private Map<UUID, Double> splitMap; // userId -> share
 }

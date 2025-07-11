@@ -14,5 +14,5 @@ public interface ExpenseShareRepository extends JpaRepository<ExpenseShare, Long
     List<ExpenseShare> findByExpense(Expense expense);
     List<ExpenseShare> findByUser(User user);
     List<ExpenseShare> findByUserAndSettledFalse(User user);
-    List<ExpenseShare> findByGroupAndUserAndSettledFalse(Group group, User user);
+    List<ExpenseShare> findByExpense_GroupAndUserAndSettledFalse(Group group, User user);
 }

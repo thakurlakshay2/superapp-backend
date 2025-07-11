@@ -6,10 +6,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "settlements")
@@ -20,8 +22,13 @@ import java.time.LocalDateTime;
 public class Settlement {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(name = "id", updatable = false, nullable = false)
+    private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_id", nullable = false)
@@ -45,9 +52,10 @@ public class Settlement {
     @Enumerated(EnumType.STRING)
     private SettlementStatus status;
 
-    @Column(name = "settlement_date")
+    @Column(name = "settlement_date", nullable = true)
     private LocalDateTime settlementDate;
 
+    @Column(nullable = true)
     private String notes;
 
     @CreationTimestamp
